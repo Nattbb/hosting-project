@@ -1,35 +1,36 @@
-Description of Twitter bootstrap import into Moodle
+DESCRIPTION OF FONT AWESOME IMPORT INTO MOODLE
+-----------------------------------------------
 
-Twitter bootstrap
------------------
+Download the latest free web version from https://github.com/FortAwesome/Font-Awesome/
 
-Sass:
-This theme uses Bootstrap frontend toolkit.
-The Bootstrap repository is available on:
+Font Awesome comes in 2 parts relating to Moodle:
 
-https://github.com/twbs/bootstrap
+1. Fonts:
+  a. Replace the content in lib/fonts with the files in the webfonts folder.
+  b. Update lib/thirdpartylibs.xml.
 
-To update to the latest release of twitter bootstrap:
+2. SCSS:
+  a. Replace the files in this folder (/theme/boost/scss/fontawesome) with the files in the scss folder.
+  b. Copy the LICENSE.txt file from the root to theme/boost/scss/fontawesome.
+  c. Update theme/boost/thirdpartylibs.xml.
 
-* download bootstrap source files to your home folder
-* remove folder theme/boost/scss/bootstrap
-* copy the scss files from ~/bootstrap/scss to theme/boost/scss/bootstrap
-* update ./thirdpartylibs.xml
-* follow the instructions in admin/tool/component_library/readme_moodle.txt to update the Bootstrap documentation there.
+CHANGES
+--------
+1. The fonts need to be provided using the [[font:core|xxxx]] method. Edit fontawesome/brands.scss, fontawesome/regular.scss and fontawesome/solid.scss to replace:
 
-Javascript:
+    url('#{$fa-font-path}/fa-xxxxx-400.zzzzz') format('zzzzz')
 
-* remove folder theme/boost/amd/src/bootstrap
-* copy the js files from ~/bootstrap/js/src to theme/boost/amd/src/bootstrap (including the subfolder)
-* copy index.js from ~/bootstrap/js to theme/boost/amd/src
-* edit theme/boost/amd/src/index.js and update import path (src -> bootstrap)
-* Moodle core includes the popper.js library, make sure each of the new Bootstrap js files
-includes the 'core/popper2' library instead of 'popperjs'. For current version these files were: tooltip.js and dropdown.js
-* Fix all Boostrap JS files import paths to use the correct AMD module names. For example, change:
-    import Manipulator from '../dom/manipulator.js'
-        to:
-    import Manipulator from '../dom/manipulator'
-* update ./thirdpartylibs.xml
-* run "grunt ignorefiles" to prevent linting errors appearing from the new Bootstrap js files.
-* in folder theme/boost run "grunt amd" to compile the bootstrap JS
-* in folder theme/boost run "grunt css" to compile scss
+with
+
+    url('[[font:core|fa-xxxxx-400.zzzzz]]') format('zzzzz'),
+
+FINALLY
+--------
+
+After applying the previous changes to the library:
+
+1. Update the Component library files (for instance, admin/tool/componentlibrary/content/moodle/components/moodle-icons.md).
+
+2. Run `php admin/tool/componentlibrary/cli/fetchicons.php` to update admin/tool/componentlibrary/hugo/site/data/fontawesomeicons.json
+
+3. Run `grunt` to update the CSS style files and the Component library files.
