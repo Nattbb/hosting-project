@@ -14,21 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
 /**
- * A maintenance layout for the boost theme.
+ * A login page layout for the boost theme.
  *
  * @package   theme_boost
  * @copyright 2016 Damyon Wiese
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+$bodyattributes = $OUTPUT->body_attributes();
 
 $templatecontext = [
-    // We cannot pass the context to format_string, this layout can be used during
-    // installation. At that stage database tables do not exist yet.
-    'sitename' => format_string($SITE->shortname, true, ["escape" => false]),
-    'output' => $OUTPUT
+    'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
+    'output' => $OUTPUT,
+    'bodyattributes' => $bodyattributes
 ];
 
-echo $OUTPUT->render_from_template('theme_boost/maintenance', $templatecontext);
+echo $OUTPUT->render_from_template('theme_boost/login', $templatecontext);
+

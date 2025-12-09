@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * A maintenance layout for the boost theme.
+ * A secure layout for the boost theme.
  *
  * @package   theme_boost
  * @copyright 2016 Damyon Wiese
@@ -24,11 +24,23 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$blockshtml = $OUTPUT->blocks('side-pre');
+$hasblocks = strpos($blockshtml, 'data-block=') !== false;
+$bodyattributes = $OUTPUT->body_attributes();
+
 $templatecontext = [
-    // We cannot pass the context to format_string, this layout can be used during
-    // installation. At that stage database tables do not exist yet.
-    'sitename' => format_string($SITE->shortname, true, ["escape" => false]),
-    'output' => $OUTPUT
+    'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
+    'output' => $OUTPUT,
+    'bodyattributes' => $bodyattributes,
+    'sidepreblocks' => $blockshtml,
+    'hasblocks' => $hasblocks
 ];
 
-echo $OUTPUT->render_from_template('theme_boost/maintenance', $templatecontext);
+if (empty($PAGE->layout_options['noactivityheader'])) {
+    $header = $PAGE->activityheader;
+    $renderer = $PAGE->get_renderer('core');
+    $templatecontext['headercontent'] = $header->export_for_template($renderer);
+}
+
+echo $OUTPUT->render_from_template('theme_boost/secure', $templatecontext);
+
