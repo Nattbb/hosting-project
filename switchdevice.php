@@ -15,13 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This page provides the Administration -> ... -> Theme selector UI.
+ * This code processes switch device requests-> ... -> Theme selector UI.
  *
- * @package core
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * This script doesn't require login as not logged in users should still
+ * be able to switch the device theme they are using.
+ *
+ * @package   core
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(__DIR__ . '/../config.php');
+require('../config.php');
 
-// Theme selector has been moved to admin/themeselector.php.
-redirect (new moodle_url('/admin/themeselector.php'));
+$url       = required_param('url', PARAM_LOCALURL);
+$newdevice = required_param('device', PARAM_TEXT);
+
+require_sesskey();
+
+core_useragent::set_user_device_type($newdevice);
+
+redirect($url);
